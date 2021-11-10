@@ -128,6 +128,9 @@ private:
   /// Lowers a call expression.
   void LowerCallExpr(const Scope &scope, const CallExpr &expr);
 
+  /// Lowers an integer expression
+  void LowerIntegerExpr(const Scope &scope, const IntExpr &expr);
+
   /// Lowers a function declaration.
   void LowerFuncDecl(const Scope &scope, const FuncDecl &funcDecl);
 
@@ -149,6 +152,8 @@ private:
   void EmitReturn();
   /// Emit an add opcode.
   void EmitAdd();
+  /// Emit a sub opcode.
+  void EmitSub();
   /// Emit a label.
   void EmitLabel(Label label);
   /// Emit a conditional jump.

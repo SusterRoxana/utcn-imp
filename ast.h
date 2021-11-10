@@ -45,6 +45,7 @@ public:
     REF,
     BINARY,
     CALL,
+    INT
   };
 
 public:
@@ -57,6 +58,24 @@ private:
   Kind kind_;
 };
 
+/** 
+ * Expression referring to an integer value;
+*/
+
+class IntExpr : public Expr{
+  public: 
+  IntExpr(const std::uint64_t var)
+   :Expr(Kind::INT)
+   , integer_(var)
+{
+}
+   const std::uint64_t &GetInt() const {return integer_;}
+
+   private:
+
+   //name of the identifier
+   std::uint64_t integer_;
+};
 /**
  * Expression referring to a named value.
  */
@@ -82,7 +101,7 @@ class BinaryExpr : public Expr {
 public:
   /// Enumeration of binary operators.
   enum class Kind {
-    ADD
+    ADD, SUB
   };
 
 public:
@@ -307,6 +326,7 @@ using TopLevelStmt = std::variant
 /**
  * Main node of the AST, capturing information about the program.
  */
+
 class Module final : public Node {
 public:
   using BlockList = std::vector<TopLevelStmt>;

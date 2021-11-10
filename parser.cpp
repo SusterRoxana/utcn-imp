@@ -143,6 +143,13 @@ std::shared_ptr<Expr> Parser::ParseTermExpr()
       return std::static_pointer_cast<Expr>(
           std::make_shared<RefExpr>(ident)
       );
+    };
+    case Token::Kind::INT: {
+      std::uint64_t integer(tk.GetInt());
+      lexer_.Next();
+      return std::static_pointer_cast<Expr>(
+        std::make_shared<IntExpr>(integer)
+      );
     }
     default: {
       std::ostringstream os;
@@ -175,10 +182,20 @@ std::shared_ptr<Expr> Parser::ParseCallExpr()
 std::shared_ptr<Expr> Parser::ParseAddSubExpr()
 {
   std::shared_ptr<Expr> term = ParseCallExpr();
-  while (Current().Is(Token::Kind::PLUS)) {
-    lexer_.Next();
+  while (Current().Is(Token::Kind::PLUS) || Current().Is(Token::Kind::MINUS)) {
+   // lexer_.Next();
+   // auto rhs = ParseCallExpr();
+    if(Current().Is(Token::Kind::PLUS))
+    {
+        lexer_.Next();
     auto rhs = ParseCallExpr();
     term = std::make_shared<BinaryExpr>(BinaryExpr::Kind::ADD, term, rhs);
+    }
+    else{
+        lexer_.Next();
+    auto rhs = ParseCallExpr();
+      term = std::make_shared<BinaryExpr>(BinaryExpr::Kind::SUB, term, rhs);
+    }
   }
   return term;
 }
